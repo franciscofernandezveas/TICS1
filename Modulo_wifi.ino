@@ -1,7 +1,16 @@
 #include <ESP8266WiFi.h>
+#include<ESP8266WebServer.h>
 
-String ssid     = "JuanTelefono";
+
+String ssid     = "Francisco";
 String password = "12345678";
+ESP8266WebServer server(80);
+void handleRoot(){
+  digitalWrite(2,1);
+  server.send(200,"text/plano ","hello world" );
+  digitalWrite(2,0);
+}
+  
 
 byte cont = 0;
 byte max_intentos = 50;
@@ -30,6 +39,10 @@ Serial.println("");
       Serial.print("macAdress: ");
       Serial.println(WiFi.macAddress());
       Serial.println("*********************************************");
+
+      server.on("/",handleRoot);
+      server.begin();
+      Serial.println("Server HTTP started");
   }
   else { //No se conectó
       Serial.println("------------------------------------");
@@ -39,5 +52,5 @@ Serial.println("");
 }
 
 void loop() {
- 
+ server.handleClient();
 }
